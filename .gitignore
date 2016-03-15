@@ -1,0 +1,17 @@
+/yii
+/yii.bat
+.idea
+/vendor
+composer.phar
+composer.lock
+/config/params-local.php
+/config/db-local.php
+/config/mongo-local.php
+/runtime
+/web/assets
+npm-debug.log
+.gitignore.idea/*
+web/uploads/*
+!web/uploads/images/web/uploads/
+web/uploads/images/driver/*
+!web/uploads/images/driver/.gitignore
