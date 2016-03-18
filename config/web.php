@@ -1,6 +1,10 @@
 <?php
+use yii\helpers\ArrayHelper;
 
 $params = require(__DIR__ . '/params.php');
+
+$dbMain = require(__DIR__ . '/db.php');
+$dbLocal = file_exists(__DIR__ . '/db-local.php') ? require_once(__DIR__ . '/db-local.php') : [];
 
 $config = [
     'id' => 'basic',
@@ -37,8 +41,10 @@ $config = [
                 ],
             ],
         ],
-        'db' => require(__DIR__ . '/db.php'),
-
+        'db' =>  ArrayHelper::merge(
+            $dbMain,
+            $dbLocal
+        ),
         'urlManager' => [
             'class' => 'yii\web\UrlManager',
             // Disable index.php

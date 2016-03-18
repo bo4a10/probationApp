@@ -1,9 +1,13 @@
 <?php
+use yii\helpers\ArrayHelper;
 
 Yii::setAlias('@tests', dirname(__DIR__) . '/tests/codeception');
 
 $params = require(__DIR__ . '/params.php');
-$db = require(__DIR__ . '/db.php');
+//$db = require(__DIR__ . '/db.php');
+$dbMain = require(__DIR__ . '/db.php');
+$dbLocal = file_exists(__DIR__ . '/db-local.php') ? require_once(__DIR__ . '/db-local.php') : [];
+
 
 $config = [
     'id' => 'basic-console',
@@ -22,7 +26,10 @@ $config = [
                 ],
             ],
         ],
-        'db' => $db,
+        'db' =>  ArrayHelper::merge(
+            $dbMain,
+            $dbLocal
+        ),
     ],
     'params' => $params,
     /*
