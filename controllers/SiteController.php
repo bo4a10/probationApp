@@ -2,13 +2,16 @@
 
 namespace app\controllers;
 
-use Yii;
-use yii\filters\AccessControl;
-use yii\web\Controller;
-use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\ContactForm;
-use app\models\SignupForm;
+use Yii,
+    yii\filters\AccessControl,
+    yii\web\Controller,
+    yii\filters\VerbFilter,
+    app\models\LoginForm,
+    app\models\ContactForm,
+    app\models\SignupForm,
+    app\models\User,
+    yii\web\UploadedFile,
+    DateTime;
 
 class SiteController extends Controller
 {
@@ -66,8 +69,10 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm();
+
+
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            return $this->actionUserinfo(Yii::$app->user->identity);
         }
         return $this->render('login', [
             'model' => $model,
@@ -101,15 +106,44 @@ class SiteController extends Controller
 
     public function actionSignup()
     {
+
+        $date = new DateTime();
+        $timestamp = $date->getTimestamp();
+
         $model = new SignupForm();
-        if ($model->load(Yii::$app->request->post())) {
-            if ($user = $model->signup()) {
-                Yii::$app->getSession()->setFlash('success', 'success');
-                return $this -> goHome();
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+
+            $user = new User();
+            $user->username = $model->username;
+            $user->email = $model->email;
+            $user->setPassword($model->password);
+            $user->phone_number = $model->phone_number;
+            $user->generateAuthKey();
+
+            $image = UploadedFile::getInstance($model, 'photo');
+
+
+            $user->setPhotoName($timestamp . $image->name);
+            $photopath = Yii::$app->basePath . '/web/img_upload/' . $timestamp. $image->name  ;
+
+            if($user->save()) $image->saveAs($photopath);
+
+            return $this -> goHome();
+
         }
+
         return $this->render('signup', [
             'model' => $model,
         ]);
     }
+
+    public function actionUserinfo($userinfo)
+    {
+        return $this->render('userinfo', [
+            'model' => $userinfo,
+        ]);
+
+    }
+
+
 }

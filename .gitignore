@@ -15,3 +15,4 @@ web/uploads/*
 !web/uploads/images/web/uploads/
 web/uploads/images/driver/*
 !web/uploads/images/driver/.gitignore
+web/img_upload/*

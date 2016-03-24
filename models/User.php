@@ -2,8 +2,8 @@
 
 namespace app\models;
 
-use Yii, yii\web\IdentityInterface;
-use yii\base\NotSupportedException;
+use Yii, yii\web\IdentityInterface,
+yii\base\NotSupportedException;
 
 /**
  * This is the model class for table "user".
@@ -18,10 +18,11 @@ use yii\base\NotSupportedException;
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
-    public $password = "";
+ //   public $password = "";
     /**
      * @inheritdoc
      */
+
     public static function tableName()
     {
         return 'user';
@@ -33,9 +34,9 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'password', 'email'], 'required'],
-            [['username', 'password', 'email', 'token'], 'string', 'max' => 255],
-//          [['phonenumber'], 'string', 'max' => 20]
+            [['username', 'password_hash', 'email'], 'required'],
+            [['username', 'password_hash', 'email', 'token'], 'string', 'max' => 255],
+            [['phone_number'], 'string', 'max' => 20]
         ];
     }
 
@@ -49,8 +50,10 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'username' => 'Username',
             'password_hash' => 'Password hash',
             'email' => 'Email',
-            'phonenumber' => 'Phone number',
+            'phone_number' => 'Phone number',
             'token' => 'Token',
+            'auth_key' => 'Authentication key',
+            'photo' => 'Photo',
 
         ];
     }
@@ -84,7 +87,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return static::findOne(['username' => $username]);
     }
 
-
     public function validatePassword($password)
     {
         return Yii::$app->security->validatePassword($password, $this->password_hash);
@@ -92,7 +94,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function setPassword($password)
     {
         $this->password_hash = Yii::$app->security->generatePasswordHash($password);
-        $this->password = $password;
     }
     public function generateAuthKey()
     {
@@ -100,10 +101,19 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     }
     public function beforeSave($insert)
     {
-        if ($this->password) {
-            $this->setPassword($this->password);
+        if (parent::beforeSave($insert)) {
+            if ($insert) {
+                $this->generateAuthKey();
+            }
+            return true;
         }
-        return parent::beforeSave($insert);
+        return false;
+
+    }
+
+    public function setPhotoName($name)
+    {
+        return $this->photo = $name;
 
     }
 
