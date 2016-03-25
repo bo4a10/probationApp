@@ -2,12 +2,16 @@
 
 namespace app\controllers;
 
-use Yii;
-use yii\filters\AccessControl;
-use yii\web\Controller;
-use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\ContactForm;
+use Yii,
+    yii\filters\AccessControl,
+    yii\web\Controller,
+    yii\filters\VerbFilter,
+    app\models\LoginForm,
+    app\models\ContactForm,
+    app\models\SignupForm,
+    app\models\User,
+    yii\web\UploadedFile,
+    DateTime;
 
 class SiteController extends Controller
 {
@@ -16,8 +20,14 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout'],
+                'only' => ['logout', 'signup'],
                 'rules' => [
+                    [
+                        'actions' => ['signup'],
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ],
+
                     [
                         'actions' => ['logout'],
                         'allow' => true,
@@ -59,8 +69,13 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm();
+
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+
+            if (Yii::$app->user->identity->token == 'admintoken') {
+                return $this->redirect('/admin/admin/');
+            }
+            return $this->actionUserinfo(Yii::$app->user->identity);
         }
         return $this->render('login', [
             'model' => $model,
@@ -91,4 +106,51 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
+
+    public function actionSignup()
+    {
+
+        $date = new DateTime();
+        $timestamp = $date->getTimestamp();
+
+        $model = new SignupForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+
+            $user = new User();
+            $user->username = $model->username;
+            $user->email = $model->email;
+            $user->setPassword($model->password);
+            $user->phone_number = $model->phone_number;
+            $user->generateAuthKey();
+
+            $image = UploadedFile::getInstance($model, 'photo');
+
+
+            $user->setPhotoName($timestamp . $image->name);
+            $photopath = Yii::$app->basePath . '/web/img_upload/' . $timestamp. $image->name  ;
+
+            if($user->save()) $image->saveAs($photopath);
+
+            return $this -> goHome();
+
+        }
+
+        return $this->render('signup', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionUserinfo($userinfo)
+    {
+        if ($userinfo->photo == null) {
+            $userinfo->photo = 'default';
+        }
+
+        return $this->render('userinfo', [
+            'model' => $userinfo,
+        ]);
+
+    }
+
+
 }

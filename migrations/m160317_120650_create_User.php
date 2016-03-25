@@ -1,60 +1,47 @@
 <?php
 
+
 use yii\db\Migration;
+
 
 class m160317_120650_create_User extends Migration
 {
+
     public function up()
     {
+
+        $security = new \yii\base\Security();
+
         $this->createTable('user', [
             'id' => $this->primaryKey(),
-            'login' => $this->string()->notNull(),
-            'password' => $this->string()->notNull(),
+            'username' => $this->string()->notNull(),
+            'password_hash' => $this->string()->notNull(),
             'email' => $this->string()->notNull(),
-            'phonenumber' => $this-> string(20),
+            'phone_number' => $this-> string(20),
             'token' => $this -> string(),
+            'auth_key' => $this->string(32),
+            'photo' => $this->string(),
         ]);
 
         $this->insert('user',[
-            'login'=>'user1test',
-            'password' =>'UserOne',
+            'username'=>'user1test',
+            'password_hash' => $security->generatePasswordHash('userone'),
             'email' => 'userone@user.com',
-            'phonenumber' => '+78847299283',
+            'phone_number' => '+78847299283',
             'token' => 'usertoken',
         ]);
 
-        $this->insert('user',[
-            'login'=>'user2test',
-            'password' =>'UserTwo',
-            'email' => 'usertwo@user.com',
-            'phonenumber' => '+72238911163',
-            'token' => 'usertoken',
+       $this->insert('user',[
+            'username'=>'admin',
+            'password_hash' => $security->generatePasswordHash('admin'),
+            'email' => 'admin@admin.com',
+            'phone_number' => '+00000000000',
+            'token' => 'admintoken',
         ]);
 
-        $this->insert('user',[
-            'login'=>'user3test',
-            'password' =>'UserThree',
-            'email' => 'userthree@user.com',
-            'phonenumber' => '+71937582043',
-            'token' => 'usertoken',
-        ]);
 
-        $this->insert('user',[
-            'login'=>'user4test',
-            'password' =>'UserFour',
-            'email' => 'userfour@user.com',
-            'phonenumber' => '+73820928461',
-            'token' => 'usertoken',
-        ]);
-
-        $this->insert('user',[
-            'login'=>'user5test',
-            'password' =>'UserFive',
-            'email' => 'userfive@user.com',
-            'phonenumber' => '+73857299462',
-            'token' => 'usertoken',
-        ]);
     }
+
 
     public function down()
     {
