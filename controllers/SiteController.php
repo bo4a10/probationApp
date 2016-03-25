@@ -139,6 +139,7 @@ class SiteController extends Controller
 
     public function actionUserinfo($userinfo)
     {
+
         return $this->render('userinfo', [
             'model' => $userinfo,
         ]);

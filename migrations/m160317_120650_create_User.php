@@ -25,43 +25,20 @@ class m160317_120650_create_User extends Migration
 
         $this->insert('user',[
             'username'=>'user1test',
-            'password_hash' => $security->generatePasswordHash('UserOne'),
+            'password_hash' => $security->generatePasswordHash('userone'),
             'email' => 'userone@user.com',
             'phone_number' => '+78847299283',
             'token' => 'usertoken',
         ]);
 
-//        $this->insert('user',[
-//            'username'=>'user2test',
-//            'password_hash' => $security->generatePasswordHash('UserTwo'),
-//            'email' => 'usertwo@user.com',
-//            'phonenumber' => '+72238911163',
-//            'token' => 'usertoken',
-//        ]);
-//
-//        $this->insert('user',[
-//            'username'=>'user3test',
-//            'password_hash' => $security->generatePasswordHash('UserThree'),
-//            'email' => 'userthree@user.com',
-//            'phonenumber' => '+71937582043',
-//            'token' => 'usertoken',
-//        ]);
-//
-//        $this->insert('user',[
-//            'username'=>'user4test',
-//            'password_hash' => $security->generatePasswordHash('UserFour'),
-//            'email' => 'userfour@user.com',
-//            'phonenumber' => '+73820928461',
-//            'token' => 'usertoken',
-//        ]);
-//
-//        $this->insert('user',[
-//            'username'=>'user5test',
-//            'password_hash' =>$security->generatePasswordHash('UserFive'),
-//            'email' => 'userfive@user.com',
-//            'phonenumber' => '+73857299462',
-//            'token' => 'usertoken',
-//        ]);
+       $this->insert('user',[
+            'username'=>'admin',
+            'password_hash' => $security->generatePasswordHash('admin'),
+            'email' => 'admin@admin.com',
+            'phone_number' => '+00000000000',
+            'token' => 'admintoken',
+        ]);
+
 
     }
 
