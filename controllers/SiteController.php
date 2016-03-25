@@ -70,8 +70,11 @@ class SiteController extends Controller
 
         $model = new LoginForm();
 
-
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+
+            if (Yii::$app->user->identity->token == 'admintoken') {
+                return $this->redirect('/admin/admin/');
+            }
             return $this->actionUserinfo(Yii::$app->user->identity);
         }
         return $this->render('login', [
@@ -139,6 +142,9 @@ class SiteController extends Controller
 
     public function actionUserinfo($userinfo)
     {
+        if ($userinfo->photo == null) {
+            $userinfo->photo = 'default';
+        }
 
         return $this->render('userinfo', [
             'model' => $userinfo,

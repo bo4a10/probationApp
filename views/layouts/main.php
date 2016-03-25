@@ -38,26 +38,28 @@ AppAsset::register($this);
 
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => Yii::$app->user->isGuest ?
-            [
-                ['label' => 'Signup', 'url' => ['/site/signup']],
-                ['label' => 'Login', 'url' => ['/site/login']],
-            ] :
-            [
-//                (Yii::$app->user->identity->token == 'admintoken') ?
-//                    ['label' => 'Logout (' . Yii::$app->user->identity->username . ')',
-//                        'url' => ['/site/logout'],
-//                        'linkOptions' => ['data-method' => 'post']] :
-
+        'items' => call_user_func(function() {
+            if (!Yii::$app->user->isGuest) {
+                return (Yii::$app->user->identity->token == 'admintoken') ?
+                    [
+                    ['label'  => 'Logout (' . Yii::$app->user->identity->username . ')',
+                        'url' => ['/site/logout'],
+                        'linkOptions' => ['data-method' => 'post']],
+                    ] : [
                     ['label' => 'Home', 'url' => ['/site/index']],
                     ['label' => 'About', 'url' => ['/site/about']],
                     ['label' => 'Contact', 'url' => ['/site/contact']],
                     ['label' => 'Logout (' . Yii::$app->user->identity->username . ')',
                          'url' => ['/site/logout'],
-                         'linkOptions' => ['data-method' => 'post']],
-            ]
-
-
+                         'linkOptions' => ['data-method' => 'post']]
+                    ];
+            } else {
+                return [
+                ['label' => 'Signup', 'url' => ['/site/signup']],
+                ['label' => 'Login', 'url' => ['/site/login']],
+            ];
+            }
+        }),
     ]);
     NavBar::end();
     ?>
