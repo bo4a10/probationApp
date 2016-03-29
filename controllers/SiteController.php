@@ -125,7 +125,7 @@ class SiteController extends Controller
 
             $image = UploadedFile::getInstance($model, 'photo');
 
-            if ($image == NULL) {
+            if (!empty($image)) {
                 $user->setPhotoName('default.png');
             } else {
                 $user->setPhotoName($timestamp . $image->name);

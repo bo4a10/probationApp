@@ -13,10 +13,6 @@ class User extends \app\models\User
     public $newPassword;
     public $newPasswordRepeat;
 
-
-    /**
-     * @inheritdoc
-     */
     public static function tableName()
     {
         return 'user';
@@ -64,32 +60,5 @@ class User extends \app\models\User
         }
         return false;
     }
-
-    /**
-     * @inheritdoc
-     */
-//    public function rules()
-//    {
-//        return [
-//            [['id', 'username',], 'required'],
-//            [['phone_number'], 'string', 'max' => 20],
-//            [['email'], 'string'],
-//        ];
-//    }
-//
-//    /**
-//     * @inheritdoc
-//     */
-//    public function attributeLabels()
-//    {
-//        return [
-//            'id'           => 'ID',
-//            'username'     => 'Username',
-//            'password'     => 'Password',
-//            'phone_number' => 'Telephone number',
-//            'email'        => 'Email',
-//        ];
-//    }
-
 
 }

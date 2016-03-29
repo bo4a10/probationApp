@@ -11,6 +11,8 @@ use Yii,
 
 class AdminController extends Controller
 {
+    const ONEHUNDRED = 100;
+
     public function behaviors()
     {
         return [
@@ -91,6 +93,7 @@ class AdminController extends Controller
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'onehundred' => self::ONEHUNDRED,
         ]);
     }
 

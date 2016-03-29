@@ -12,15 +12,15 @@ use yii\helpers\Html,
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'username') ?>
+    <?php echo $form->field($model, 'username') ?>
 
-    <?= $form->field($model, 'email') ?>
+    <?php echo $form->field($model, 'email') ?>
 
-    <?= $form->field($model, 'phone_number') ?>
+    <?php echo $form->field($model, 'phone_number') ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+        <?php echo Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+        <?php echo Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

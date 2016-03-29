@@ -9,15 +9,15 @@ use yii\helpers\Html,
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'username')->textInput() ?>
+    <?php echo $form->field($model, 'username')->textInput() ?>
 
-    <?= $form->field($model, 'newPassword')->passwordInput(['maxlength' => true]) ?>
+    <?php echo $form->field($model, 'newPassword')->passwordInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'newPasswordRepeat')->passwordInput(['maxlength' => true]) ?>
+    <?php echo $form->field($model, 'newPasswordRepeat')->passwordInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'email')->textInput() ?>
+    <?php echo $form->field($model, 'email')->textInput() ?>
 
-    <?= $form->field($model, 'phone_number') ?>
+    <?php echo $form->field($model, 'phone_number') ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

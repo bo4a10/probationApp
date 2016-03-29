@@ -8,6 +8,7 @@ use app\models\User,
 
 class UsersSearch extends User
 {
+    const PAGESIZE = 10;
 
     public function rules()
     {
@@ -29,7 +30,7 @@ class UsersSearch extends User
         $dataprovider =  new ActiveDataProvider([
             'query'      => $query,
             'pagination' => [
-                'pageSize' => 10,
+                'pageSize' => self::PAGESIZE,
             ],
             'sort' => [
                 'attributes' => ['username',],

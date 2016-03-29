@@ -23,13 +23,6 @@ class m160317_120650_create_User extends Migration
             'photo' => $this->string(),
         ]);
 
-        $this->insert('user',[
-            'username'=>'user1test',
-            'password_hash' => $security->generatePasswordHash('userone'),
-            'email' => 'userone@user.com',
-            'phone_number' => '+78847299283',
-            'token' => 'usertoken',
-        ]);
 
        $this->insert('user',[
             'username'=>'admin',

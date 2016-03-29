@@ -9,9 +9,9 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?php echo Html::encode($this->title) ?></h1>
 
-    <?= DetailView::widget([
+    <?php echo DetailView::widget([
         'model' => $model,
         'condensed'  => true,
         'hover'      => true,
@@ -23,14 +23,14 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'photo',
                 'value'     => '/img_upload/' . $model-> photo,
-                'format'    => ['image',['width'=>'100','height'=>'100']],
+                'format'    => ['image',['width'=> $onehundred,'height'=> $onehundred]],
             ],
         ],
     ]) ?>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?php echo Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?php echo Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
