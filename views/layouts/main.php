@@ -27,9 +27,9 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => (!(Yii::$app->user->isGuest) && Yii::$app->user->identity->token == 'admintoken') ? 'Admin' : 'My Company',
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => [
+        'brandLabel'=> (!(Yii::$app->user->isGuest) && Yii::$app->user->identity->token == 'admintoken') ? 'Admin' : 'My Company',
+        'brandUrl'  => (!(Yii::$app->user->isGuest) && Yii::$app->user->identity->token == 'admintoken') ? '/admin/admin' : Yii::$app->homeUrl,
+        'options'   => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
@@ -45,6 +45,8 @@ AppAsset::register($this);
                     ['label'  => 'Logout (' . Yii::$app->user->identity->username . ')',
                         'url' => ['/site/logout'],
                         'linkOptions' => ['data-method' => 'post']],
+                    ['label' => 'Users manager', 'url' => ['/admin/admin/usersmanager']],
+
                     ] : [
                     ['label' => 'Home', 'url' => ['/site/index']],
                     ['label' => 'About', 'url' => ['/site/about']],

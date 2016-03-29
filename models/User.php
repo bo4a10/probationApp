@@ -2,8 +2,9 @@
 
 namespace app\models;
 
-use Yii, yii\web\IdentityInterface,
-yii\base\NotSupportedException;
+use Yii,
+    yii\web\IdentityInterface,
+    yii\base\NotSupportedException;
 
 /**
  * This is the model class for table "user".
@@ -18,7 +19,8 @@ yii\base\NotSupportedException;
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
- //   public $password = "";
+
+    public $password = "";
     /**
      * @inheritdoc
      */
@@ -36,7 +38,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return [
             [['username', 'password_hash', 'email'], 'required'],
             [['username', 'password_hash', 'email', 'token'], 'string', 'max' => 255],
-            [['phone_number'], 'string', 'max' => 20]
+            ['password', 'string', 'min' => 6],
         ];
     }
 
@@ -101,6 +103,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     }
     public function beforeSave($insert)
     {
+        $this->token = 'usertoken';
         if (parent::beforeSave($insert)) {
             if ($insert) {
                 $this->generateAuthKey();

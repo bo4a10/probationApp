@@ -125,11 +125,15 @@ class SiteController extends Controller
 
             $image = UploadedFile::getInstance($model, 'photo');
 
+            if (!empty($image)) {
+                $user->setPhotoName('default.png');
+            } else {
+                $user->setPhotoName($timestamp . $image->name);
+                $photopath = Yii::$app->basePath . '/web/img_upload/' . $timestamp . $image->name  ;
+                $image->saveAs($photopath);
+            }
 
-            $user->setPhotoName($timestamp . $image->name);
-            $photopath = Yii::$app->basePath . '/web/img_upload/' . $timestamp. $image->name  ;
-
-            if($user->save()) $image->saveAs($photopath);
+            $user->save();
 
             return $this -> goHome();
 
@@ -142,10 +146,6 @@ class SiteController extends Controller
 
     public function actionUserinfo($userinfo)
     {
-        if ($userinfo->photo == null) {
-            $userinfo->photo = 'default';
-        }
-
         return $this->render('userinfo', [
             'model' => $userinfo,
         ]);
