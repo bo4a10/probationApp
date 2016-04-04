@@ -3,11 +3,11 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
-use yii\helpers\Html;
-use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
-use yii\widgets\Breadcrumbs;
-use app\assets\AppAsset;
+use yii\helpers\Html,
+    yii\bootstrap\Nav,
+    yii\bootstrap\NavBar,
+    yii\widgets\Breadcrumbs,
+    app\assets\AppAsset;
 
 AppAsset::register($this);
 ?>
@@ -18,7 +18,7 @@ AppAsset::register($this);
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
-    <title><?= Html::encode($this->title) ?></title>
+    <title><?php echo Html::encode(Yii::$app->params['appName']) ?></title>
     <?php $this->head() ?>
 </head>
 <body>
@@ -34,8 +34,6 @@ AppAsset::register($this);
         ],
     ]);
 
-
-
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => call_user_func(function() {
@@ -46,7 +44,7 @@ AppAsset::register($this);
                         'url' => ['/site/logout'],
                         'linkOptions' => ['data-method' => 'post']],
                     ['label' => 'Users manager', 'url' => ['/admin/admin/usersmanager']],
-
+                    ['label' => 'Products', 'url' => ['/admin/product/productmanager']],
                     ] : [
                     ['label' => 'Home', 'url' => ['/site/index']],
                     ['label' => 'About', 'url' => ['/site/about']],

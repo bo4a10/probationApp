@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'email:email',
             [
                 'attribute' => 'photo',
-                'value'     => '/img_upload/' . $model-> photo,
+                'value'     => '/user_img_upload/' . $model-> photo,
                 'format'    => ['image',['width'=> $onehundred,'height'=> $onehundred]],
             ],
         ],
