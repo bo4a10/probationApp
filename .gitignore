@@ -16,3 +16,5 @@ web/uploads/*
 web/uploads/images/driver/*
 !web/uploads/images/driver/.gitignore
 web/img_upload/*
+web/user_img_upload/*
+web/product_img_upload/*

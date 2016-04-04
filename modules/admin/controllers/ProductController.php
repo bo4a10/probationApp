@@ -1,15 +1,18 @@
 <?php
 
+
 namespace app\modules\admin\controllers;
 
-use Yii,
-    yii\web\Controller,
-    app\modules\admin\models\User,
-    app\modules\admin\models\UsersSearch,
-    yii\web\NotFoundHttpException,
-    yii\filters\VerbFilter;
 
-class AdminController extends Controller
+use Yii,
+    yii\filters\VerbFilter,
+    yii\web\Controller,
+    yii\web\NotFoundHttpException,
+    yii\web\UploadedFile,
+    app\modules\admin\models\Product,
+    app\modules\admin\models\ProductSearch;
+
+class ProductController extends Controller
 {
     const ONEHUNDRED = 100;
 
@@ -27,8 +30,8 @@ class AdminController extends Controller
                 'only' => [],
                 'rules' => [
                     [
-                        'allow' => true,
-                        'roles' => ['@'],
+                       'allow' => true,
+                       'roles' => ['@'],
                     ]
                 ]
 
@@ -36,44 +39,36 @@ class AdminController extends Controller
         ];
     }
 
-    public function actionIndex()
+    public function actionCreate()
     {
-        if (!(Yii::$app->user->isGuest) && (Yii::$app->user->identity->token == 'admintoken')) {
-            return $this->render('index');
+        $product = new Product();
+
+        if ($product->load(Yii::$app->request->post()) && $product->validate()) {
+
+            $product = $this->photoTake($product);
+
+            $product->save();
+            return $this->render('view', ['model' => $product]);
+        } else {
+            return $this->render('create', [
+                'model' => $product,
+            ]);
         }
-        return $this->goHome();
     }
 
-    public function actionUsersmanager()
-    {
-        $searchModel = new UsersSearch();
+    public function actionProductmanager() {
+        $searchModel = new ProductSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('usersmanager', [
+        return $this->render('productmanager', [
             'searchModel'  => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
 
-    public function actionCreate()
-    {
-        $model = new User();
-        $model->scenario = User::SCENARIO_ADMIN_CREATE;
-        $model->setPhotoName('default.png');
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
-
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $model->scenario = User::SCENARIO_ADMIN_UPDATE;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -87,13 +82,13 @@ class AdminController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-        return $this->redirect(['usersmanager']);
+        return $this->redirect(['productmanager']);
     }
 
     protected function findModel($id)
     {
-        $model = User::findOne($id);
-        if (isset($model)) {
+        $model = Product::findOne($id);
+        if (isset($model)){
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -104,8 +99,23 @@ class AdminController extends Controller
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'onehundred' => self::ONEHUNDRED,
         ]);
+    }
+
+    public function photoTake($object) {
+
+        $photo = UploadedFile::getInstance($object, 'photo');
+
+        if (!empty($photo)) {
+            $photopath = Yii::$app->basePath . '/web/product_img_upload/' . $photo->name ;
+            $photo->saveAs($photopath);
+            $object->productphoto = $photo->name;
+        } else {
+            $object->productphoto = 'default.png';
+        }
+
+        return $object;
+
     }
 
 }

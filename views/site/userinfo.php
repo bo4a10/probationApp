@@ -16,7 +16,7 @@ echo DetailView::widget([
         'phone_number',
         [
             'attribute' => 'photo',
-            'value'     => '/img_upload/' . $model-> photo,
+            'value'     => '/user_img_upload/' . $model-> photo,
             'format'    => ['image',['width'=>'100','height'=>'100']],
         ],
 

@@ -20,7 +20,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
+                'only' => ['logout', 'signup', 'userinfo'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -29,7 +29,7 @@ class SiteController extends Controller
                     ],
 
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['logout', 'userinfo'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -73,7 +73,7 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
 
             if (Yii::$app->user->identity->token == 'admintoken') {
-                return $this->redirect('/admin/admin/');
+                return $this->redirect('/admin/admin/usersmanager');
             }
             return $this->actionUserinfo(Yii::$app->user->identity);
         }
@@ -125,11 +125,11 @@ class SiteController extends Controller
 
             $image = UploadedFile::getInstance($model, 'photo');
 
-            if (!empty($image)) {
+            if (empty($image)) {
                 $user->setPhotoName('default.png');
             } else {
                 $user->setPhotoName($timestamp . $image->name);
-                $photopath = Yii::$app->basePath . '/web/img_upload/' . $timestamp . $image->name  ;
+                $photopath = Yii::$app->basePath . '/web/user_img_upload/' . $timestamp . $image->name  ;
                 $image->saveAs($photopath);
             }
 
