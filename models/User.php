@@ -53,7 +53,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'password_hash' => 'Password hash',
             'email' => 'Email',
             'phone_number' => 'Phone number',
-            'token' => 'Token',
+            'group' => 'Group',
             'auth_key' => 'Authentication key',
             'photo' => 'Photo',
 
@@ -103,7 +103,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     }
     public function beforeSave($insert)
     {
-        $this->token = 'usertoken';
+        $this->group = 'user';
         if (parent::beforeSave($insert)) {
             if ($insert) {
                 $this->generateAuthKey();

@@ -53,7 +53,7 @@ class UsersSearch extends User
             'phone_number' => $this->phone_number,
         ]);
         $query->andFilterWhere([
-            'token' => 'usertoken',
+            'group' => 'user',
         ]);
         return $dataprovider;
     }

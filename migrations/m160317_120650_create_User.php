@@ -18,7 +18,7 @@ class m160317_120650_create_User extends Migration
             'password_hash' => $this->string()->notNull(),
             'email' => $this->string()->notNull(),
             'phone_number' => $this-> string(20),
-            'token' => $this -> string(),
+            'group' => $this -> string(32),
             'auth_key' => $this->string(32),
             'photo' => $this->string(),
         ]);
@@ -29,7 +29,7 @@ class m160317_120650_create_User extends Migration
             'password_hash' => $security->generatePasswordHash('admin'),
             'email' => 'admin@admin.com',
             'phone_number' => '+00000000000',
-            'token' => 'admintoken',
+            'group' => 'admin',
         ]);
 
 
