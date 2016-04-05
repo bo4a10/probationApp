@@ -26,6 +26,9 @@ $config = [
                 ],
             ],
         ],
+        'authManager' => [
+            'class' => 'yii\rbac\PhpManager'
+        ],
         'db' =>  ArrayHelper::merge(
             $dbMain,
             $dbLocal

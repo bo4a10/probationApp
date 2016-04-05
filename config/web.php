@@ -46,6 +46,10 @@ $config = [
                 ],
             ],
         ],
+        'authManager' => [
+            'class' => 'yii\rbac\PhpManager',
+            'defaultRoles' => ['admin', 'user',],
+        ],
         'db' =>  ArrayHelper::merge(
             $dbMain,
             $dbLocal
@@ -62,11 +66,6 @@ $config = [
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
             ],
         ],
-
-
-
-
-
     ],
     'params' => $params,
 ];

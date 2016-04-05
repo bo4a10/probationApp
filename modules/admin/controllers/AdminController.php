@@ -3,11 +3,12 @@
 namespace app\modules\admin\controllers;
 
 use Yii,
-    yii\web\Controller,
+    yii\filters\AccessControl,
+    yii\filters\VerbFilter,
     app\modules\admin\models\User,
     app\modules\admin\models\UsersSearch,
-    yii\web\NotFoundHttpException,
-    yii\filters\VerbFilter;
+    yii\web\Controller,
+    yii\web\NotFoundHttpException;
 
 class AdminController extends Controller
 {
@@ -23,22 +24,28 @@ class AdminController extends Controller
                 ],
             ],
             'access' => [
-                'class' => \yii\filters\AccessControl::className(),
-                'only' => [],
+                'class' => AccessControl::className(),
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['@'],
-                    ]
-                ]
-
+                        'roles' => ['admin'],
+                    ],
+                    [
+                        'allow' => false,
+                        'roles' => ['user'],
+                    ],
+                    [
+                        'allow' => false,
+                        'roles' => ['?'],
+                    ],
+                ],
             ],
         ];
     }
 
     public function actionIndex()
     {
-        if (!(Yii::$app->user->isGuest) && (Yii::$app->user->identity->token == 'admintoken')) {
+        if (!Yii::$app->user->isGuest && (Yii::$app->user->identity->group == 'admin')) {
             return $this->render('index');
         }
         return $this->goHome();

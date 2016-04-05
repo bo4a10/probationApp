@@ -20,19 +20,22 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup', 'userinfo'],
+
                 'rules' => [
                     [
-                        'actions' => ['signup'],
+                        'actions' => ['signup', 'login'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
-
                     [
-                        'actions' => ['logout', 'userinfo'],
+                        'actions' => ['logout', 'userinfo', 'index', 'about', 'contact' ],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => ['user'],
                     ],
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ]
                 ],
             ],
             'verbs' => [
@@ -72,7 +75,7 @@ class SiteController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
 
-            if (Yii::$app->user->identity->token == 'admintoken') {
+            if (Yii::$app->user->identity->group == 'admin') {
                 return $this->redirect('/admin/admin/usersmanager');
             }
             return $this->actionUserinfo(Yii::$app->user->identity);

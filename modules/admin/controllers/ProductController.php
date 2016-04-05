@@ -3,14 +3,14 @@
 
 namespace app\modules\admin\controllers;
 
-
 use Yii,
     yii\filters\VerbFilter,
+    yii\filters\AccessControl,
+    app\modules\admin\models\Product,
+    app\modules\admin\models\ProductSearch,
     yii\web\Controller,
     yii\web\NotFoundHttpException,
-    yii\web\UploadedFile,
-    app\modules\admin\models\Product,
-    app\modules\admin\models\ProductSearch;
+    yii\web\UploadedFile;
 
 class ProductController extends Controller
 {
@@ -26,15 +26,21 @@ class ProductController extends Controller
                 ],
             ],
             'access' => [
-                'class' => \yii\filters\AccessControl::className(),
-                'only' => [],
+                'class' => AccessControl::className(),
                 'rules' => [
                     [
-                       'allow' => true,
-                       'roles' => ['@'],
+                        'allow' => false,
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'allow' => false,
+                        'roles' => ['user'],
+                    ],
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],
                     ]
-                ]
-
+                ],
             ],
         ];
     }
@@ -102,7 +108,7 @@ class ProductController extends Controller
         ]);
     }
 
-    public function photoTake($object) {
+    private function photoTake($object) {
 
         $photo = UploadedFile::getInstance($object, 'photo');
 

@@ -51,7 +51,7 @@ class User extends \app\models\User
 
     public function beforeSave($insert)
     {
-        $this->token = 'usertoken';
+        $this->group = 'user';
         if (parent::beforeSave($insert)) {
             if (!empty($this->newPassword)) {
                 $this->setPassword($this->newPassword);
