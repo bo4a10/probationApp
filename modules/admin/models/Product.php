@@ -12,9 +12,11 @@ class Product extends ActiveRecord
 
     const ONEHUNDRED = 100;
     const DECIMAL_PLACES = 2;
+    const DISCOUNT_IF_NOT_SET= 0;
 
 
     public $photo;
+    public $category;
 
 
     public static function tableName()
@@ -26,7 +28,7 @@ class Product extends ActiveRecord
     {
         return [
             [['title', 'price'], 'required'],
-            [['title', 'category', 'short_description', 'productphoto'] , 'string', 'max' => self::MAX_STR_LENGTH],
+            [['title', 'short_description', 'productphoto'] , 'string', 'max' => self::MAX_STR_LENGTH],
 
             ['price', 'double'],
             ['price', 'match', 'pattern' =>'/^(?:[1-9]\d*|0)?(?:\.[\d]{0,2})?$/' ],
@@ -41,6 +43,7 @@ class Product extends ActiveRecord
             ['photo', 'safe'],
             ['photo', 'file', 'extensions'=>'jpg, gif, png'],
 
+            ['category', 'safe']
         ];
     }
 
@@ -51,7 +54,6 @@ class Product extends ActiveRecord
             'title' => 'Title',
             'price' => 'Price',
             'discount' => 'Discount',
-            'category' => 'Category',
             'short_description' => 'Short description',
             'description' => 'Description',
             'productphoto' => 'Product photo',
@@ -66,10 +68,24 @@ class Product extends ActiveRecord
 
     public function beforeSave()
     {
-        $this->price = round($this->price, 2);
-        if (!isset($this->discount)) $this->discount = 0;
+        $this->price = round($this->price, self::DECIMAL_PLACES);
+        if (!isset($this->discount)) {
+            $this->discount = self::DISCOUNT_IF_NOT_SET;
+        }
 
         return true;
+    }
+
+    public function getProductsCategories()
+    {
+        return $this->hasMany(ProductsCategory::className(), ['products_id' => 'id']);
+    }
+
+    public function getCategories()
+    {
+        return $this->hasMany(Category::className(), ['id' => 'category_id'])
+            ->viaTable('products_category', ['products_id' => 'id']);
+
     }
 
 }

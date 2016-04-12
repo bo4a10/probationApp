@@ -2,7 +2,9 @@
 
 use yii\helpers\Html,
     yii\widgets\ActiveForm,
-    kartik\file\FileInput;
+    app\modules\admin\models\Category,
+    kartik\file\FileInput,
+    kartik\select2\Select2;
 
 ?>
 
@@ -13,13 +15,15 @@ use yii\helpers\Html,
     echo $form->field($model, 'title')->textInput();
     echo $form->field($model, 'price')->textInput();
     echo $form->field($model, 'discount')->textInput();
-    echo $form->field($model, 'category')->dropDownList([
-        'food' => 'food',
-        'clothes' => 'clothes',
-        'household chemicals' => 'household chemicals'
-    ], [
-        'prompt' => 'choose category...',
+
+    echo $form->field($model, 'category')->widget(Select2::classname(), [
+        'data' => Category::getDropDownArray(),
+        'options' => [
+            'placeholder' => 'Select categories ...',
+            'multiple' => true
+        ],
     ]);
+
     echo $form->field($model, 'short_description')->textInput();
     echo $form->field($model, 'description')->textArea();
     echo $form->field($model, 'photo')-> widget(FileInput::classname(), [
@@ -34,9 +38,7 @@ use yii\helpers\Html,
     ?>
 
     <div class="form-group">
-<!--        --><?php //echo Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-        <?php echo Html::submitButton('Create', ['class' => 'btn btn-success']) ?>
-
+        <?php echo Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

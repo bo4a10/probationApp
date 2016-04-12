@@ -40,11 +40,14 @@ AppAsset::register($this);
             if (!Yii::$app->user->isGuest) {
                 return (Yii::$app->user->identity->group == 'admin') ?
                     [
+                    ['label' => 'Categories', 'url' => ['/admin/category']],
+                    ['label' => 'Products', 'url' => ['/admin/product/productmanager']],
+                    ['label' => 'Users manager', 'url' => ['/admin/admin/usersmanager']],
+
                     ['label'  => 'Logout (' . Yii::$app->user->identity->username . ')',
                         'url' => ['/site/logout'],
                         'linkOptions' => ['data-method' => 'post']],
-                    ['label' => 'Users manager', 'url' => ['/admin/admin/usersmanager']],
-                    ['label' => 'Products', 'url' => ['/admin/product/productmanager']],
+
                     ] : [
                     ['label' => 'Home', 'url' => ['/site/index']],
                     ['label' => 'About', 'url' => ['/site/about']],

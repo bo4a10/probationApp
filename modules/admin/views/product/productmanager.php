@@ -1,7 +1,14 @@
 <?php
 
 use yii\helpers\Html,
+    app\modules\admin\models\Category,
+    app\modules\admin\models\Product,
+    yii\helpers\ArrayHelper,
     yii\grid\GridView;
+
+/* @var $this yii\web\View */
+/* @var $searchModel app\modules\admin\models\ProductSearch */
+/* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Product manager';
 $this->params['breadcrumbs'][] = $this->title;
@@ -33,24 +40,24 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'category',
-                'filter' => [
-                    'food' => 'food',
-                    'clothes' => 'clothes',
-                    'household chemicals' => 'household chemicals'
-                ]
+                'filter' => Category::find()->select(['name', 'id'])->indexBy('id')->column(),
+                'value' => function (Product $product) {
+                    return implode(', ', ArrayHelper::map($product->categories, 'id', 'name'));
+                }
+
             ],
             'short_description',
             [
                 'attribute' => 'show',
                 'format' => 'html',
-                'value' => function ($data) {
-                    if ($data['show']) {
+                'value' => function (Product $product) {
+                    if ($product['show']) {
                         return Html::img('/img_upload/yes.png',
                         ['width' => '60px']);
-                    } else {
+                    }
                         return Html::img('/img_upload/not.png',
                         ['width' => '60px']);
-                    }
+
                 },
             ],
 

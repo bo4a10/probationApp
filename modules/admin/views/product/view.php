@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html,
+    yii\helpers\ArrayHelper,
     kartik\detail\DetailView;
 
 $this->title = $model->title;
@@ -31,7 +32,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->discount . ' %';
                 })
             ],
-            'category',
+            [
+                'attribute' => 'category',
+                'value'     => call_user_func(function() use ($model) {
+                    return  implode(', ', ArrayHelper::map($model->categories, 'id', 'name'));
+                })
+            ],
             'short_description',
             'description',
             [
