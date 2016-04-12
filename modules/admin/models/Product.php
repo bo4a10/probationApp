@@ -69,7 +69,9 @@ class Product extends ActiveRecord
     public function beforeSave()
     {
         $this->price = round($this->price, self::DECIMAL_PLACES);
-        if (!isset($this->discount)) $this->discount = self::DISCOUNT_IF_NOT_SET;
+        if (!isset($this->discount)) {
+            $this->discount = self::DISCOUNT_IF_NOT_SET;
+        }
 
         return true;
     }
@@ -77,7 +79,6 @@ class Product extends ActiveRecord
     public function getProductsCategories()
     {
         return $this->hasMany(ProductsCategory::className(), ['products_id' => 'id']);
-
     }
 
     public function getCategories()
