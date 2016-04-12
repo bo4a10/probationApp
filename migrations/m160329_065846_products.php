@@ -11,7 +11,6 @@ class m160329_065846_products extends Migration
             'title' => $this->string()->notNull(),
             'price' => $this->double()->notNull(),
             'discount' => $this->integer(),
-            'category' => $this-> string(255),
             'short_description' => $this -> string(255),
             'description' => $this->text(),
             'productphoto' => $this->string(),

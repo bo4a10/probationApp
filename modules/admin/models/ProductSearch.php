@@ -7,6 +7,7 @@ use yii\data\ActiveDataProvider;
 class ProductSearch extends Product
 {
     const PAGESIZE = 10;
+    const PRICEDELTA = 1;
 
     public function rules()
     {
@@ -17,7 +18,7 @@ class ProductSearch extends Product
 
     public function search($params)
     {
-        $query = Product::find();
+        $query = Product::find()->with('categories')->limit(10);
 
         $dataprovider =  new ActiveDataProvider([
             'query'      => $query,
@@ -25,13 +26,12 @@ class ProductSearch extends Product
                 'pageSize' => self::PAGESIZE,
             ],
             'sort' => [
-                'attributes' => ['title', 'price', 'discount', 'category'],
+                'attributes' => ['title', 'price', 'discount',],
             ],
 
         ]);
 
-        $this->load($params);
-        if (!$this->validate()) {
+        if (!( $this->load($params) && $this->validate() )) {
             return $dataprovider;
         }
 
@@ -39,18 +39,19 @@ class ProductSearch extends Product
 
         if (!empty($this->price)) {
             $query->andFilterWhere(['>=', 'price', $this->price])
-                ->andFilterWhere(['<', 'price', $this->price + 1]);
+                ->andFilterWhere(['<', 'price', $this->price + self::PRICEDELTA]);
         }
 
         $query->andFilterWhere([
             'discount' => $this->discount,
         ]);
-        $query->andFilterWhere([
-            'category' => $this->category,
-        ]);
+
+        $query->joinWith(['categories'])->andFilterWhere(['like', 'category.id', $this->category]);
+
         $query->andFilterWhere([
             'short_description' => $this->short_description,
         ]);
+
         $query->andFilterWhere([
             'show' => $this->show,
         ]);

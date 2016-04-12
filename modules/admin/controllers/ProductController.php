@@ -3,6 +3,7 @@
 
 namespace app\modules\admin\controllers;
 
+use app\modules\admin\models\ProductsCategory;
 use Yii,
     yii\filters\VerbFilter,
     yii\filters\AccessControl,
@@ -52,9 +53,11 @@ class ProductController extends Controller
         if ($product->load(Yii::$app->request->post()) && $product->validate()) {
 
             $product = $this->photoTake($product);
-
             $product->save();
-            return $this->render('view', ['model' => $product]);
+
+            $this->junctionMake($product);
+
+            return $this->actionView($product->id);
         } else {
             return $this->render('create', [
                 'model' => $product,
@@ -63,6 +66,7 @@ class ProductController extends Controller
     }
 
     public function actionProductmanager() {
+
         $searchModel = new ProductSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -76,7 +80,10 @@ class ProductController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $this->junctionDelete($model);
+            $this->junctionMake($model);
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
@@ -103,6 +110,7 @@ class ProductController extends Controller
 
     public function actionView($id)
     {
+
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -121,6 +129,34 @@ class ProductController extends Controller
         }
 
         return $object;
+
+    }
+
+    private function junctionMake(Product $object) {
+
+        $rows = [];
+        foreach ($object->category as $category) {
+
+            $subrows = [$object->id, ];
+            array_push($subrows, $category);
+            array_push($rows, $subrows);
+
+        }
+
+        Yii::$app->db->createCommand()->batchInsert(
+            ProductsCategory::tableName(),
+            ['products_id', 'category_id'],
+            $rows
+        )->execute();
+
+    }
+
+    private function junctionDelete(Product $object) {
+
+        Yii::$app->db->createCommand()->delete(
+            ProductsCategory::tableName(),
+            ['in', 'products_id', $object->id]
+        )->execute();
 
     }
 
